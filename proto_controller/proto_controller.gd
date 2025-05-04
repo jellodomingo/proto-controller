@@ -20,6 +20,8 @@ extends CharacterBody3D
 ## Look around rotation speed.
 @export var look_speed : float = 0.002
 ## Normal speed.
+@export var joypad_look_speed : float = 3000.0
+## Normal speed.
 @export var base_speed : float = 7.0
 ## Speed of jump.
 @export var jump_velocity : float = 4.5
@@ -37,10 +39,20 @@ extends CharacterBody3D
 @export var input_forward : String = "ui_up"
 ## Name of Input Action to move Backward.
 @export var input_back : String = "ui_down"
+## Name of Joypad Input Action to move camera Left.
+@export var joypad_look_left : String = "right_stick_left"
+## Name of Joypad Input Action to move camera Right.
+@export var joypad_look_right : String = "right_stick_right"
+## Name of Joypad Input Action to move camera Up.
+@export var joypad_look_forward : String = "right_stick_up"
+## Name of Joypad Input Action to move camera Down.
+@export var joypad_look_back : String = "right_stick_down"
 ## Name of Input Action to Jump.
 @export var input_jump : String = "ui_accept"
 ## Name of Input Action to Sprint.
 @export var input_sprint : String = "sprint"
+## Name of Joypad Input Action to move camera Down.
+@export var joypad_sprint : String = "right_stick_left_analog_click"
 ## Name of Input Action to toggle freefly mode.
 @export var input_freefly : String = "freefly"
 
@@ -114,6 +126,15 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = 0
 		velocity.y = 0
+		
+	# Handle camera rotation with right analog stick
+	var right_stick_input := Vector2(
+		Input.get_action_strength("right_stick_right") - Input.get_action_strength("right_stick_left"),
+		Input.get_action_strength("right_stick_down") - Input.get_action_strength("right_stick_up")
+	)
+	
+	if right_stick_input.length() > 0:
+		rotate_look(right_stick_input * joypad_look_speed * delta)
 	
 	# Use velocity to actually move
 	move_and_slide()
