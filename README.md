@@ -1,5 +1,6 @@
 # Proto Controller
-Simple first-person Character Controller for prototyping games in Godot.
+Simple first-person Character Controller for prototyping games in Godot. 
+Edited to have controller support.
 
 It's designed to be simple.
 
